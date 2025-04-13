@@ -118,19 +118,25 @@ export function handleGameStateChange(state: string): void {
  * Initializes the application
  */
 function initializeApp() {
+    console.log('[DEBUG] Initializing app');
+
     // Create UI elements
     const ui = createGameUI();
+    console.log('[DEBUG] UI elements created, canvas id:', ui.canvas.id);
 
     // Add to document
     const root = document.getElementById('app');
     if (root) {
         root.appendChild(ui.container);
+        console.log('[DEBUG] UI elements added to app root');
     } else {
         document.body.appendChild(ui.container);
+        console.log('[DEBUG] UI elements added to body (app root not found)');
     }
 
     // Initialize game
     const app = createApp(ui.canvas);
+    console.log('[DEBUG] Game app created');
 
     // Connect reset button
     ui.resetButton.addEventListener('click', () => {
@@ -158,9 +164,12 @@ function initializeApp() {
 
     // Initial resize
     resizeCanvas(ui.canvas);
+    console.log('[DEBUG] Canvas resized, dimensions:', ui.canvas.width, 'x', ui.canvas.height);
 
     // Start game
+    console.log('[DEBUG] Starting game');
     app.startGame();
+    console.log('[DEBUG] Game started');
 }
 
 /**

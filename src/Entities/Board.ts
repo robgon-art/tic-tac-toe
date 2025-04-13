@@ -62,7 +62,7 @@ export function createBoardEntity(
 }
 
 /**
- * Factory function that creates and registers a Board entity in the ECS
+ * Factory function that creates a Board entity with proper component attachment
  * 
  * @param ecs The Entity Component System instance
  * @param entityName Custom name for the entity (optional)
@@ -74,8 +74,55 @@ export function createAndRegisterBoardEntity(
     entityName: string = 'Board',
     options: BoardOptions = {}
 ): Entity {
-    const boardEntity = createBoardEntity(ecs, entityName, options);
+    // Create the entity first
+    const boardEntity = ecs.createEntity(
+        entityName,
+        [], // No component names, we'll add components explicitly
+        []  // No processors
+    );
+
+    // Create the components
+    const boardComponent = new BoardComponent();
+    const renderComponent = new RenderComponent(
+        options.width || 300,
+        options.height || 300
+    );
+
+    // Customize render component if options provided
+    if (options.lineWidth) {
+        renderComponent.lineWidth = options.lineWidth;
+    }
+
+    if (options.markSize) {
+        renderComponent.markSize = options.markSize;
+    }
+
+    // DIRECT COMPONENT ATTACHMENT APPROACH
+    // This ensures components are properly registered and linked to entities
+
+    // 1. First add these components to the ECS system
+    ecs.addComponent(boardComponent);
+    ecs.addComponent(renderComponent);
+
+    console.log('[DEBUG] Created Board components:', boardComponent.name, renderComponent.name);
+
+    // 2. Then explicitly add each component to the entity
+    // This is the key step that's likely missing
+    try {
+        // Try using API with component objects
+        (ecs as any).addComponentToEntity(boardEntity, boardComponent);
+        (ecs as any).addComponentToEntity(boardEntity, renderComponent);
+        console.log('[DEBUG] Added components to Board via object method');
+    } catch (e) {
+        // Fallback to using component names
+        (ecs as any).addComponentToEntity(boardEntity, 'BoardComponent');
+        (ecs as any).addComponentToEntity(boardEntity, 'RenderComponent');
+        console.log('[DEBUG] Added components to Board via name method');
+    }
+
+    // 3. Add entity to the ECS system
     ecs.addEntity(boardEntity);
+
     return boardEntity;
 }
 
