@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "javascript-entity-component-system": "^2.0.1",
     "lit": "^3.2.1"
   },
   "devDependencies": {

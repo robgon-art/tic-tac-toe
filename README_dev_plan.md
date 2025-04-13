@@ -117,7 +117,7 @@ Entities combine components:
 │   │   ├── GameStateComponent.ts
 │   │   ├── ScoreComponent.ts
 │   │   ├── RenderComponent.ts
-│   │   └── index.ts              # Exports all components
+│   │   └── ComponentIndex.ts     # Exports all components
 │   │
 │   ├── Processors/
 │   │   ├── RenderProcessor.ts
@@ -126,14 +126,14 @@ Entities combine components:
 │   │   ├── WinCheckProcessor.ts
 │   │   ├── AIProcessor.ts
 │   │   ├── GameStateProcessor.ts
-│   │   └── index.ts              # Exports all processors
+│   │   └── ProcessorIndex.ts     # Exports all processors
 │   │
 │   ├── Entities/
 │   │   ├── Game.ts
 │   │   ├── Board.ts
 │   │   ├── Player.ts
 │   │   ├── Computer.ts
-│   │   └── index.ts              # Exports all entity factories
+│   │   └── EntityIndex.ts        # Exports all entity factories
 │   │
 │   ├── utils/
 │   │   ├── canvas.ts             # Canvas utility functions
@@ -142,23 +142,19 @@ Entities combine components:
 │   └── ui/
 │       └── GameCanvas.ts         # Lit component for the canvas
 │
-└── tests/
-    ├── Components/               # Tests for components
-    ├── Processors/               # Tests for processors
-    └── utils/                    # Tests for utility functions
 ```
 
 ## Implementation Approach
 
 1. Set up the project with Vite, Lit, and TypeScript
 2. Install the javascript-entity-component-system package
-3. Implement the components first (data structures)
-4. Implement the processors (game logic)
-5. Create entity factories
-6. Implement the game controller with the main loop
-7. Create the UI with HTML canvas
-8. Implement tests for components and processors
-9. Refine the AI algorithm
+3. Implement the components first (data structures) with tests
+4. Implement the processors (game logic) with tests
+5. Create entity factories with tests
+6. Implement the game controller with the main loop with tests
+7. Create the UI with HTML canvas with tests
+8. Implement tests for components and processors with tests
+9. Refine the AI algorithm with tests
 
 ## Testing Strategy
 
