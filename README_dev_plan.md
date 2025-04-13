@@ -51,29 +51,29 @@ Components are pure data containers:
 
 Processors contain the game logic:
 
-1. **RenderProcessor**
-   - Draws the board, grid lines, and X/O marks
-   - Renders win lines and game state information
+1. **GameStateProcessor**
+   - Handles transitions between game states
+   - Manages game reset and new game creation
 
-2. **InputProcessor**
-   - Handles user clicks on the board
-   - Validates input and updates board state
-
-3. **TurnProcessor**
+2. **TurnProcessor**
    - Manages turn switching between players
    - Tracks whose turn it is to go first in new games
 
-4. **WinCheckProcessor**
+3. **WinCheckProcessor**
    - Checks for win conditions after each move
    - Detects draw situations
+
+4. **InputProcessor**
+   - Handles user clicks on the board
+   - Validates input and updates board state
 
 5. **AIProcessor**
    - Determines computer's moves
    - Implements simple AI strategy
 
-6. **GameStateProcessor**
-   - Handles transitions between game states
-   - Manages game reset and new game creation
+6. **RenderProcessor**
+   - Draws the board, grid lines, and X/O marks
+   - Renders win lines and game state information
 
 ### Entities
 
@@ -116,24 +116,21 @@ Entities combine components:
 │   │   ├── TurnComponent.ts
 │   │   ├── GameStateComponent.ts
 │   │   ├── ScoreComponent.ts
-│   │   ├── RenderComponent.ts
-│   │   └── ComponentIndex.ts     # Exports all components
+│   │   └── RenderComponent.ts
 │   │
 │   ├── Processors/
-│   │   ├── RenderProcessor.ts
-│   │   ├── InputProcessor.ts
+│   │   ├── GameStateProcessor.ts
 │   │   ├── TurnProcessor.ts
 │   │   ├── WinCheckProcessor.ts
+│   │   ├── InputProcessor.ts
 │   │   ├── AIProcessor.ts
-│   │   ├── GameStateProcessor.ts
-│   │   └── ProcessorIndex.ts     # Exports all processors
+│   │   └── RenderProcessor.ts
 │   │
 │   ├── Entities/
 │   │   ├── Game.ts
 │   │   ├── Board.ts
 │   │   ├── Player.ts
-│   │   ├── Computer.ts
-│   │   └── EntityIndex.ts        # Exports all entity factories
+│   │   └── Computer.ts
 │   │
 │   ├── utils/
 │   │   ├── canvas.ts             # Canvas utility functions
@@ -155,6 +152,21 @@ Entities combine components:
 7. Create the UI with HTML canvas with tests
 8. Implement tests for components and processors with tests
 9. Refine the AI algorithm with tests
+
+## AI Strategy
+
+The AI will use a rule-based strategy, applying rules in priority order:
+
+1. **Win if Possible**: If there is a move that completes three in a row, take it immediately to win.
+2. **Block Opponent's Win**: If the opponent has two in a row and an empty square would complete three, block that move.
+3. **Create a Fork**: If possible, make a move that creates two simultaneous threats to win on the next turn (a fork).
+4. **Block Opponent's Fork**: If the opponent can create a fork, block it. If multiple blocking options exist, choose one that also creates your own opportunity.
+5. **Take the Center**: If the center square is open, take it. This is especially strong when the computer goes second.
+6. **Play Opposite Corner**: If the opponent is in a corner, play the opposite corner if available.
+7. **Take an Empty Corner**: If one or more corners are free, take one.
+8. **Take an Empty Side**: If corners and center are occupied, take a side square.
+
+This approach implements a "perfect play" strategy that should never lose and will always win when possible.
 
 ## Testing Strategy
 
