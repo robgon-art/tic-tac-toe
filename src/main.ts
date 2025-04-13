@@ -4,7 +4,7 @@ import { createApp, resizeCanvas } from './app.js';
  * Creates and configures the game canvas element
  * @returns The configured canvas element
  */
-function createGameCanvas(): HTMLCanvasElement {
+export function createGameCanvas(): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     canvas.id = 'game-canvas';
     canvas.width = 300;
@@ -16,7 +16,7 @@ function createGameCanvas(): HTMLCanvasElement {
  * Creates the game UI elements
  * @returns Object containing UI elements
  */
-function createGameUI() {
+export function createGameUI() {
     // Create game container
     const gameContainer = document.createElement('div');
     gameContainer.id = 'game-container';
@@ -76,6 +76,45 @@ function createGameUI() {
 }
 
 /**
+ * Handle reset button click
+ * @param app The game app instance
+ */
+export function handleResetClick(app: any): void {
+    app.resetGame();
+    updateStatus('Game Reset');
+}
+
+/**
+ * Handle canvas click
+ * @param app Game app instance
+ * @param x X coordinate of click
+ * @param y Y coordinate of click
+ */
+export function handleCanvasClick(app: any, x: number, y: number): void {
+    app.handleClick(x, y);
+}
+
+/**
+ * Handle score changes
+ * @param playerScore Player's score
+ * @param ties Number of ties
+ * @param computerScore Computer's score
+ */
+export function handleScoreChange(playerScore: number, ties: number, computerScore: number): void {
+    document.getElementById('player-score')!.textContent = playerScore.toString();
+    document.getElementById('ties-score')!.textContent = ties.toString();
+    document.getElementById('computer-score')!.textContent = computerScore.toString();
+}
+
+/**
+ * Handle game state changes
+ * @param state New game state
+ */
+export function handleGameStateChange(state: string): void {
+    updateStatus(state);
+}
+
+/**
  * Initializes the application
  */
 function initializeApp() {
@@ -95,8 +134,7 @@ function initializeApp() {
 
     // Connect reset button
     ui.resetButton.addEventListener('click', () => {
-        app.resetGame();
-        updateStatus('Game Reset');
+        handleResetClick(app);
     });
 
     // Handle canvas clicks
@@ -104,20 +142,14 @@ function initializeApp() {
         const rect = ui.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        app.handleClick(x, y);
+        handleCanvasClick(app, x, y);
     });
 
     // Update score display
-    app.onScoreChange = (playerScore: number, ties: number, computerScore: number) => {
-        document.getElementById('player-score')!.textContent = playerScore.toString();
-        document.getElementById('ties-score')!.textContent = ties.toString();
-        document.getElementById('computer-score')!.textContent = computerScore.toString();
-    };
+    app.onScoreChange = handleScoreChange;
 
     // Update game status 
-    app.onGameStateChange = (state: string) => {
-        updateStatus(state);
-    };
+    app.onGameStateChange = handleGameStateChange;
 
     // Handle window resize
     window.addEventListener('resize', () => {
@@ -135,7 +167,7 @@ function initializeApp() {
  * Updates the game status display
  * @param status Status message to display
  */
-function updateStatus(status: string) {
+export function updateStatus(status: string) {
     const statusElement = document.getElementById('game-status');
     if (statusElement) {
         statusElement.textContent = status;
