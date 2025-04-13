@@ -127,10 +127,10 @@ Entities combine components:
 │   │   └── RenderProcessor.ts
 │   │
 │   ├── Entities/
-│   │   ├── Game.ts
 │   │   ├── Board.ts
 │   │   ├── Player.ts
-│   │   └── Computer.ts
+│   │   ├── Computer.ts
+│   │   └── Game.ts
 │   │
 │   ├── utils/
 │   │   ├── canvas.ts             # Canvas utility functions
@@ -148,6 +148,11 @@ Entities combine components:
 3. Implement the components first (data structures) with tests
 4. Implement the processors (game logic) with tests
 5. Create entity factories with tests
+   - **Entity Implementation Order**:
+     1. **Board** - Foundational structure containing the game state
+     2. **Player** - Human player implementation
+     3. **Computer** - Computer player implementation
+     4. **Game** - Coordinates the overall game state
 6. Implement the game controller with the main loop with tests
 7. Create the UI with HTML canvas with tests
 8. Implement tests for components and processors with tests
